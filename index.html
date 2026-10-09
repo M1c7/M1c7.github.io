@@ -42,6 +42,11 @@ a{color:inherit}
 label{display:block;font-weight:600;font-size:.95rem}
 label small{display:block;font-weight:400;color:var(--mute)}
 input,select{width:100%;margin-top:6px;padding:11px;font:inherit;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.use{grid-column:1/-1;border:2px solid var(--line);border-radius:10px;padding:12px 16px;margin:0}
+.use legend{font-weight:600;padding:0 6px}
+.use legend small{display:block;font-weight:400;color:var(--mute)}
+.ck{display:flex;align-items:center;gap:10px;font-weight:400;padding:7px 0}
+.ck input{width:24px;height:24px;margin:0;flex:none}
 .out{margin-top:22px;border-top:2px dashed var(--line);padding-top:18px}
 .out[hidden]{display:none}
 .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:2rem}
@@ -66,7 +71,7 @@ footer{background:#F1EBDA;color:var(--ink);border-top:3px solid var(--sun);paddi
 <body>
 <header class="top">
   <a class="logo" href="#"><img class="tl" id="lg2" alt="" width="38" height="38">Malangeni Electrical Power Works</a>
-  <nav><a href="#solar">Solar</a><a href="#cleaning">Cleaning</a><a href="#contact">Contact</a></nav>
+  <nav><a href="#solar">Solar</a><a href="#cleaning">Cleaning</a><a href="#dc">Battery power</a><a href="#contact">Contact</a></nav>
 </header>
 
 <div class="hero"><div class="wrap">
@@ -100,7 +105,7 @@ footer{background:#F1EBDA;color:var(--ink);border-top:3px solid var(--sun);paddi
       <button type="button" id="tOld" aria-pressed="false">I already have solar</button>
     </div>
     <div class="grid">
-      <label>Average monthly electricity bill (R)<small>Look at your last few bills</small><input id="bill" type="number" min="0" value="1800" inputmode="numeric"></label>
+      <fieldset class="use"><legend>What do you use at home or work?<small>Tick everything that applies. A rough idea is fine.</small></legend><label class="ck"><input type="checkbox" class="ap" data-kwh="2" checked> Lights, TV, Wi-Fi and phone charging</label><label class="ck"><input type="checkbox" class="ap" data-kwh="1.5" checked> Fridge or freezer</label><label class="ck"><input type="checkbox" class="ap" data-kwh="5"> Electric geyser (hot water)</label><label class="ck"><input type="checkbox" class="ap" data-kwh="3"> Stove or oven</label><label class="ck"><input type="checkbox" class="ap" data-kwh="1"> Kettle and microwave</label><label class="ck"><input type="checkbox" class="ap" data-kwh="0.7"> Washing machine</label><label class="ck"><input type="checkbox" class="ap" data-kwh="4"> Air conditioner</label><label class="ck"><input type="checkbox" class="ap" data-kwh="3"> Pool pump</label><label class="ck"><input type="checkbox" class="ap" data-kwh="6"> Shop or office equipment (computers, tills, fridges)</label></fieldset>
       <label>What must keep running in a power cut?<small>Pick the closest</small>
         <select id="bk"><option value="0">Nothing, I just want lower bills</option><option value="0.6" selected>Lights, fridge, Wi-Fi, TV</option><option value="1.5">Plus geyser or stove sometimes</option><option value="2.5">Almost everything</option></select></label>
       <label>Hours you want backup<small>Evening and night</small><select id="bh"><option>2</option><option selected>4</option><option>6</option><option>8</option></select></label>
@@ -129,6 +134,17 @@ footer{background:#F1EBDA;color:var(--ink);border-top:3px solid var(--sun);paddi
   </div>
 </div></section>
 
+<section id="dc" style="padding-top:0"><div class="wrap">
+  <h2>Run lights and gadgets straight from a battery</h2>
+  <p>Not everything needs a big solar system. Lights, Wi-Fi, phone charging, fans and cameras can run directly on battery power (DC). No inverter is needed, so less power is wasted and the price is lower. It is a very affordable way to stay lit and connected in a power cut.</p>
+  <div class="why" style="margin-bottom:20px"><div><h3>Cheaper</h3><p>No inverter to buy. A small panel, a battery and a charger can run your essentials.</p></div><div><h3>Longer backup</h3><p>Efficient LED lights and low-power devices make the battery last much longer.</p></div><div><h3>Safe by design</h3><p>Every circuit is fused and wired with the right cable thickness, so nothing overheats.</p></div></div>
+  <div class="tool">
+    <div class="grid"><fieldset class="use"><legend>What should run on battery?<small>Tick what you want. Hours per day are already set.</small></legend><label class="ck"><input type="checkbox" class="dv" data-w="30" data-h="5" checked> LED lights (about 6 bulbs)</label><label class="ck"><input type="checkbox" class="dv" data-w="12" data-h="24" checked> Wi-Fi router</label><label class="ck"><input type="checkbox" class="dv" data-w="30" data-h="3" checked> Phone and laptop charging</label><label class="ck"><input type="checkbox" class="dv" data-w="40" data-h="4"> TV (12V or low power)</label><label class="ck"><input type="checkbox" class="dv" data-w="20" data-h="6"> Fan</label><label class="ck"><input type="checkbox" class="dv" data-w="10" data-h="24"> Security cameras (4)</label><label class="ck"><input type="checkbox" class="dv" data-w="25" data-h="20"> 12V fridge or freezer</label></fieldset></div>
+    <div style="margin-top:18px"><button class="btn" type="button" id="dgo">Size my battery system</button></div>
+    <div class="out" id="dres" hidden aria-live="polite"></div>
+  </div>
+</div></section>
+
 <section><div class="wrap">
   <h2>Why people choose us</h2>
   <div class="why">
@@ -149,7 +165,7 @@ footer{background:#F1EBDA;color:var(--ink);border-top:3px solid var(--sun);paddi
 <script>
 /* EDIT THESE: contact details and prices (rand) */
 var PHONE="27794361209", PHONE_SHOW="079 436 1209";
-var P={tariff:3.0,sun:4.5,perKWp:8500,perKWhBat:5500,inv:{3:14000,5:21000,8:31000,12:44000},install:6000,
+var P={tariff:3.0,sun:4.5,perKWp:8500,perKWhBat:5500,inv:{3:14000,5:21000,8:31000,12:44000},install:6000,dcKit:3500,
  clean:{perPanel:30,min:350}};
 var $=function(i){return document.getElementById(i)},R=function(n){return "R"+(Math.round(n/100)*100).toLocaleString("en-ZA")};
 var mode="new",last="";
@@ -157,7 +173,9 @@ function tab(m){mode=m;$("tNew").setAttribute("aria-pressed",m=="new");$("tOld")
 $("tNew").onclick=function(){tab("new")};$("tOld").onclick=function(){tab("old")};
 function row(v,l){return "<div><b>"+v+"</b><span>"+l+"</span></div>"}
 $("go").onclick=function(){
- var kwh=(+$("bill").value||0)/P.tariff, daily=kwh/30, off=+$("off").value;
+ var daily=0;document.querySelectorAll(".ap:checked").forEach(function(e){daily+=+e.dataset.kwh});
+ if(!daily){$("res").innerHTML="<p>Please tick at least one thing you use.</p>";$("res").hidden=false;return}
+ var kwh=daily*30, off=+$("off").value;
  var kwp=Math.max(1,Math.round(daily*off/(P.sun*0.8)*10)/10);
  var load=+$("bk").value, hrs=+$("bh").value;
  var bat=load?Math.round(load*hrs/0.8*10)/10:0;
@@ -186,6 +204,13 @@ $("cgo").onclick=function(){
  $("cres").innerHTML="<p class='big'>About "+R(c*0.9)+" to "+R(c*1.15)+"</p><p>For "+n+" panels. Clean panels can make noticeably more power, and we use soft brushes and clean water that will not scratch the glass.</p><p class='note'>Rough guide. We confirm the price before we start.</p>";
  $("cres").hidden=false;
  last="PV cleaning: "+n+" panels, est. "+R(c*0.9)+" to "+R(c*1.15);link()};
+$("dgo").onclick=function(){
+ var wh=0,n=0;document.querySelectorAll(".dv:checked").forEach(function(e){wh+=e.dataset.w*e.dataset.h;n++});
+ if(!n){$("dres").innerHTML="<p>Please tick at least one item.</p>";$("dres").hidden=false;return}
+ var bat=Math.max(0.5,Math.round(wh/1000/0.8*10)/10),pw=Math.ceil(wh/(P.sun*0.75)/10)*10,c=bat*P.perKWhBat+pw*P.perKWp/1000+P.dcKit;
+ $("dres").innerHTML="<p class='big'>About "+R(c*0.9)+" to "+R(c*1.15)+"</p><div class='rows'>"+row(bat+" kWh","Battery size")+row(pw+" W","Solar panel to charge it")+row(Math.round(wh)+" Wh","Power used per day")+"</div><p class='note'>This runs without an inverter. For bigger things like a geyser or stove, use the solar system tool above. A rough guide; a free site visit gives the exact price.</p>";
+ $("dres").hidden=false;
+ last="Battery (DC) system: "+bat+" kWh battery, "+pw+" W panel, est. "+R(c*0.9)+" to "+R(c*1.15);link()};
 function link(){$("wa").href="https://wa.me/"+PHONE+"?text="+encodeURIComponent("Hi Malangeni, I used your website. "+last+". Please can we arrange a free site visit?")}
 $("lg2").src=$("lg").src;$("tel").href="tel:+"+PHONE;$("tel").textContent="Call "+PHONE_SHOW;link();
 </script>
